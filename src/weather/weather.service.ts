@@ -1,4 +1,4 @@
-import { Injectable, } from "@nestjs/common";
+import { BadRequestException, Injectable, } from "@nestjs/common";
 import axios from 'axios';
 import { Resultado } from "./interfaces/resultado.interface";
 @Injectable()
@@ -8,14 +8,36 @@ export class WeatherService {
 
   constructor() { }
 
-  async getHumidityByLocation(lat: number, lon: number, humidity: number): Promise<Resultado> {
+  async getHumidityByLocation(lat: number, lon: number, humidityUser: number): Promise<Resultado> {
     const url = `${this.url}lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
-    try {
+    
+    try { 
       const response = await axios.get(url);
-      return response.data;
+      const humidityOW = response.data.main.humidity;
+      const city = response.data.name;
+      const inTheLimit = this.checkHumidity(humidityUser, humidityOW);
+
+      if (!inTheLimit) {
+        return {
+          status: false,
+          message: `Alerta: A umidade atual em ${city} é de ${humidityOW}%, que é maior que o valor informado de ${humidityUser}%.`
+        }
+      }
+
+      return {
+        status: true,
+        message: `A umidade atual em ${city} é de ${humidityOW}%, e está dentro do limite informado de ${humidityUser}%.`
+      }
     } catch (error) {
-      console.error('Erro ao obter dados da umidade:', error);
-      throw new Error('Não foi possível obter dados da umidade.');
+      console.error('Erro ao obter dados de umidade:', error);
+      throw new BadRequestException('Não foi possível obter dados de umidade. Verifique os dados informados.');
     }
+  }
+
+  checkHumidity(humidityUser: number, humidityOW: number): boolean {
+    if (humidityOW > humidityUser) {
+      return false;
+    }
+    return true;
   }
 }
