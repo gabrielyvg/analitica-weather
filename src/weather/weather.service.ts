@@ -10,8 +10,12 @@ export class WeatherService {
 
   async getHumidityByLocation(lat: number, lon: number, humidity: number): Promise<Resultado> {
     const url = `${this.url}lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
-    const response = await axios.get(url);
-
-    return response.data;
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao obter dados da umidade:', error);
+      throw new Error('Não foi possível obter dados da umidade.');
+    }
   }
 }
