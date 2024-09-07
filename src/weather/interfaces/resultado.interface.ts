@@ -1,4 +1,4 @@
 export interface Resultado {
   status: boolean;
-  mensagem: string;
+  message: string;
 }
