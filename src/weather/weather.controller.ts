@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Query } from "@nestjs/common";
-import { Resultado } from "./interfaces/resultado.interface"; 
+import { Controller, Get, Query } from "@nestjs/common";
 import { WeatherService } from "./weather.service";
 import { WeatherDto } from "./dto/weather.dto";
 
@@ -7,8 +6,8 @@ import { WeatherDto } from "./dto/weather.dto";
 export class WeatherController {
   constructor(private readonly weatherService: WeatherService) {}
 
-  @Get()
-  getWeather(@Query() query: WeatherDto) {
+  @Get('humidity-by-location/')
+  getHumidityByLocation(@Query() query: WeatherDto) {
     const { lat, lon, humidity } = query;
     return this.weatherService.getHumidityByLocation(lat, lon, humidity);
   }
