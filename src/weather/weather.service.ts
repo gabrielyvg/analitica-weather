@@ -30,7 +30,7 @@ export class WeatherService {
       }
     } catch (error) {
       console.error('Erro ao obter dados de umidade:', error);
-      throw new BadRequestException('Não foi possível obter dados de umidade. Verifique os dados informados.');
+      throw new Error('Não foi possível obter dados de umidade. Verifique os dados informados.');
     }
   }
 

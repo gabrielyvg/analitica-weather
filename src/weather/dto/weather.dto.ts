@@ -9,7 +9,7 @@ export class WeatherDto {
   @IsNumber({}, { message: 'Longitude deve ser um número' })
   lon: number;
 
-  @IsNotEmpty({ message: 'Humidade não deve ser vazio' })
-  @IsNumber({}, { message: 'Humidade deve ser um número' })
+  @IsNotEmpty({ message: 'Umidade não deve ser vazio' })
+  @IsNumber({}, { message: 'Umidade deve ser um número' })
   humidity: number;
 }
